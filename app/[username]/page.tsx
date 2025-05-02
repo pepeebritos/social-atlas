@@ -1,9 +1,10 @@
+// app/[username]/page.tsx
+
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-// ✅ Explicit Next.js 15 App Router typing fix
 export default async function PublicProfilePage({
   params,
 }: {
@@ -13,6 +14,7 @@ export default async function PublicProfilePage({
 
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
+  // 1. Look up UID from username collection
   const usernameRef = doc(db, 'usernames', cleanUsername);
   const usernameSnap = await getDoc(usernameRef);
 
@@ -22,6 +24,7 @@ export default async function PublicProfilePage({
 
   const { uid } = usernameSnap.data() as { uid: string };
 
+  // 2. Look up full user data from users/{uid}
   const userRef = doc(db, 'users', uid);
   const userSnap = await getDoc(userRef);
 

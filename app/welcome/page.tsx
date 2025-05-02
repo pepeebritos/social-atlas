@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaInstagram, FaXTwitter } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
@@ -56,7 +57,7 @@ export default function WelcomePage() {
     <div className="min-h-screen bg-[#1B1B1B] flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
 
-        {/* Earthy Logo with Entrance + Hover Animation */}
+        {/* Earthy Logo */}
         <motion.div
           className="relative flex-shrink-0 w-[16rem] md:w-[24rem]"
           initial={{ y: -300, rotate: 0, rotateZ: 0, scale: 1 }}
@@ -87,7 +88,7 @@ export default function WelcomePage() {
           />
         </motion.div>
 
-        {/* Text Section */}
+        {/* Text + Form */}
         <div className="text-center md:text-left text-[#FDFBF5] max-w-md md:max-w-xl">
           <h1
             className="text-[3.2rem] md:text-[6rem] font-bold leading-tight tracking-tight mb-4"
@@ -172,9 +173,9 @@ export default function WelcomePage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs">
           <span>© 2025 Social Atlas™. All rights reserved.</span>
           <span>·</span>
-          <a href="/terms" className="underline hover:text-white">Terms of Service</a>
+          <Link href="/terms" className="underline hover:text-white">Terms of Service</Link>
           <span>·</span>
-          <a href="/privacy" className="underline hover:text-white">Privacy Policy</a>
+          <Link href="/privacy" className="underline hover:text-white">Privacy Policy</Link>
         </div>
       </footer>
     </div>

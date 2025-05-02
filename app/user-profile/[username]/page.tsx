@@ -6,8 +6,7 @@ import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
 export async function generateStaticParams() {
-  // You can return an empty array or a few fallback usernames
-  return [];
+  return []; // You can return slugs here later if needed
 }
 
 export default async function PublicProfilePage({
@@ -16,7 +15,6 @@ export default async function PublicProfilePage({
   params: { username: string };
 }) {
   const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
-  console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
   const usernameRef = doc(db, 'usernames', cleanUsername);
   const usernameSnap = await getDoc(usernameRef);
@@ -72,7 +70,6 @@ export default async function PublicProfilePage({
       </div>
 
       <p className="text-sm text-gray-300 mb-6">{user.bio || 'No bio yet.'}</p>
-
       <FollowButton profileUserId={uid} />
     </div>
   );

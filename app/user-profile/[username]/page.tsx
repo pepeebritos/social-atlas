@@ -3,15 +3,14 @@ import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-export default async function PublicProfilePage({
-  params,
-}: {
+interface Props {
   params: { username: string };
-}) {
+}
+
+export default async function PublicProfilePage({ params }: Props) {
   const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
-  // 1. Look up UID from username collection
   const usernameRef = doc(db, 'usernames', cleanUsername);
   const usernameSnap = await getDoc(usernameRef);
 
@@ -21,7 +20,6 @@ export default async function PublicProfilePage({
 
   const { uid } = usernameSnap.data() as { uid: string };
 
-  // 2. Look up full user data from users/{uid}
   const userRef = doc(db, 'users', uid);
   const userSnap = await getDoc(userRef);
 
@@ -68,10 +66,7 @@ export default async function PublicProfilePage({
         </div>
       </div>
 
-      {/* Bio */}
       <p className="text-sm text-gray-300 mb-6">{user.bio || 'No bio yet.'}</p>
-
-      {/* Follow Button */}
       <FollowButton profileUserId={uid} />
     </div>
   );

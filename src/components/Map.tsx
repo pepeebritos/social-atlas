@@ -6,7 +6,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-
 type MapProps = {
   geojsonData: any[];
   focus: 'user' | 'route';
@@ -21,7 +20,6 @@ const Map = ({ geojsonData, focus }: MapProps) => {
   const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/standard');
   const [isTilted, setIsTilted] = useState(false);
 
-  // Preserve camera view when style changes
   const cameraStateRef = useRef({
     center: [-120.2, 38.9],
     zoom: 6,
@@ -30,26 +28,31 @@ const Map = ({ geojsonData, focus }: MapProps) => {
   });
 
   useEffect(() => {
-    if (!mapRef.current) return;
     const map = mapRef.current;
-    if (!map.isStyleLoaded()) {
-      map.once('style.load', () => {
-        map.setConfigProperty('basemap', 'lightPreset', lighting);
-        map.setConfigProperty('basemap', 'show3dObjects', show3D);
-      });
-    } else {
+    if (!map) return;
+
+    const applyLightingAnd3D = () => {
       map.setConfigProperty('basemap', 'lightPreset', lighting);
       map.setConfigProperty('basemap', 'show3dObjects', show3D);
+    };
+
+    if (!map.isStyleLoaded()) {
+      map.once('style.load', applyLightingAnd3D);
+    } else {
+      applyLightingAnd3D();
     }
   }, [lighting, show3D]);
 
   useEffect(() => {
-    if (!mapRef.current) return;
     const map = mapRef.current;
-    map.easeTo({ pitch: isTilted ? 60 : 0, bearing: isTilted ? 30 : 0, duration: 1000 });
+    if (!map) return;
+    map.easeTo({
+      pitch: isTilted ? 60 : 0,
+      bearing: isTilted ? 30 : 0,
+      duration: 1000,
+    });
   }, [isTilted]);
 
-  // Re-initialize map when style changes
   useEffect(() => {
     if (!mapContainer.current || geojsonData.length === 0) return;
 

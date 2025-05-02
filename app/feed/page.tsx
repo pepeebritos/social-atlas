@@ -1,10 +1,10 @@
-// NEW Social Atlas Feed Page Layout (clean grid + sidebar nav with real logo + font)
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { collection, query, orderBy, getDocs, limit, startAfter } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import PostCard from '@/components/PostCard';
 import CreatePostModal from '@/components/CreatePostModal';
@@ -52,14 +52,14 @@ export default function FeedPage() {
       <aside className="w-64 bg-[#143F2B] text-white h-screen sticky top-0 p-6 hidden md:flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
-          <Image src="/logo-pin-white.png" alt="Social Atlas" width={220} height={220} className="rounded-xl" />
+            <Image src="/logo-pin-white.png" alt="Social Atlas" width={220} height={220} className="rounded-xl" />
             <span className="text-xl font-bold tracking-tight">Social Atlas</span>
           </div>
           <nav className="mt-8 space-y-4">
-            <a href="/" className="block hover:text-green-300">Home</a>
-            <a href="/map" className="block hover:text-green-300">Map</a>
-            <a href="/explore" className="block hover:text-green-300">Explore</a>
-            <a href="/profile" className="block hover:text-green-300">Profile</a>
+            <Link href="/" className="block hover:text-green-300">Home</Link>
+            <Link href="/map" className="block hover:text-green-300">Map</Link>
+            <Link href="/explore" className="block hover:text-green-300">Explore</Link>
+            <Link href="/profile" className="block hover:text-green-300">Profile</Link>
           </nav>
         </div>
         <button

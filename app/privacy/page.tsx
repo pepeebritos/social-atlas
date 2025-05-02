@@ -60,7 +60,7 @@ export default function PrivacyPolicyPage() {
 
         <h2 className="text-xl font-semibold mt-6 mb-2">6. Changes</h2>
         <p className="mb-4">
-          We may update this policy occasionally. We'll notify you of significant changes by updating this page.
+          We may update this policy occasionally. We&apos;ll notify you of significant changes by updating this page.
         </p>
 
         <h2 className="text-xl font-semibold mt-6 mb-2">7. Contact</h2>

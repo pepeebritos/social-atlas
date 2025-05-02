@@ -1,18 +1,17 @@
-// app/[username]/page.tsx
-
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
+import { Metadata } from 'next';
 
+// ✅ DO NOT try to extend PageProps or import it anymore
 export default async function PublicProfilePage({
   params,
 }: {
   params: { username: string };
 }) {
-  const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
-
-  console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
+  const rawUsername = params.username;
+  const cleanUsername = decodeURIComponent(rawUsername).replace(/^@/, '');
 
   const usernameRef = doc(db, 'usernames', cleanUsername);
   const usernameSnap = await getDoc(usernameRef);

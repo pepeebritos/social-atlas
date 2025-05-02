@@ -5,14 +5,15 @@ import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-type PageProps = {
+type Props = {
   params: {
     username: string;
   };
 };
 
-export default async function PublicProfilePage({ params }: PageProps) {
-  const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
+export default async function PublicProfilePage({ params }: Props) {
+  const rawUsername = params.username;
+  const cleanUsername = decodeURIComponent(rawUsername).replace(/^@/, '');
 
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
@@ -24,7 +25,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
     return <div className="p-8 text-white">User not found 😢</div>;
   }
 
-  const { uid } = usernameSnap.data();
+  const { uid } = usernameSnap.data() as { uid: string };
 
   // 2. Look up full user data from users/{uid}
   const userRef = doc(db, 'users', uid);
@@ -34,7 +35,14 @@ export default async function PublicProfilePage({ params }: PageProps) {
     return <div className="p-8 text-white">User data not found 😢</div>;
   }
 
-  const user = userSnap.data();
+  const user = userSnap.data() as {
+    name: string;
+    profilePic?: string;
+    banner?: string;
+    bio?: string;
+    followers?: string[];
+    following?: string[];
+  };
 
   return (
     <div className="max-w-3xl mx-auto p-6 text-white">

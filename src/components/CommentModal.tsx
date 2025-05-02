@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { db, auth } from '@/lib/firebase';
 import {
   doc,
@@ -49,11 +49,7 @@ export default function CommentModal({ postId, isOpen, onClose }: CommentModalPr
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [expandedComments, setExpandedComments] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (isOpen) fetchComments();
-  }, [isOpen, postId]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     setLoading(true);
     const commentsRef = collection(db, 'posts', postId, 'comments');
     const q = query(commentsRef, orderBy('createdAt', 'desc'));
@@ -72,7 +68,11 @@ export default function CommentModal({ postId, isOpen, onClose }: CommentModalPr
 
     setComments(topLevel);
     setLoading(false);
-  };
+  }, [postId]);
+
+  useEffect(() => {
+    if (isOpen) fetchComments();
+  }, [isOpen, postId, fetchComments]);
 
   const handleAddComment = async () => {
     const currentUser = auth.currentUser;

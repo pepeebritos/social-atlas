@@ -5,16 +5,14 @@ import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-interface Props {
+type PageProps = {
   params: {
     username: string;
   };
-}
+};
 
-export default async function PublicProfilePage(props: Props) {
-  // ✅ Fix for Next.js 15 dynamic param
-  const { username } = await props.params;
-  const cleanUsername = decodeURIComponent(username).replace(/^@/, '');
+export default async function PublicProfilePage({ params }: PageProps) {
+  const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
 
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 

@@ -1,13 +1,17 @@
+// app/user-profile/[username]/page.tsx
+
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-interface Props {
-  params: { username: string };
-}
+type PageProps = {
+  params: {
+    username: string;
+  };
+};
 
-export default async function PublicProfilePage({ params }: Props) {
+export default async function PublicProfilePage({ params }: PageProps) {
   const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
@@ -66,7 +70,10 @@ export default async function PublicProfilePage({ params }: Props) {
         </div>
       </div>
 
+      {/* Bio */}
       <p className="text-sm text-gray-300 mb-6">{user.bio || 'No bio yet.'}</p>
+
+      {/* Follow Button */}
       <FollowButton profileUserId={uid} />
     </div>
   );

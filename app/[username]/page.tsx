@@ -1,15 +1,13 @@
-// app/[username]/page.tsx
-
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-interface PageParams {
+export default async function PublicProfilePage({
+  params,
+}: {
   params: { username: string };
-}
-
-export default async function PublicProfilePage({ params }: PageParams) {
+}) {
   const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
 
   const usernameRef = doc(db, 'usernames', cleanUsername);
@@ -66,6 +64,7 @@ export default async function PublicProfilePage({ params }: PageParams) {
       </div>
 
       <p className="text-sm text-gray-300 mb-6">{user.bio || 'No bio yet.'}</p>
+
       <FollowButton profileUserId={uid} />
     </div>
   );

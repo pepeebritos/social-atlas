@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/src/lib/firebase';
+import { db } from '@/lib/firebase';
 import dynamic from 'next/dynamic';
 
-const Map = dynamic(() => import('@/src/components/Map'), { ssr: false });
+const Map = dynamic(() => import('@/components/Map'), { ssr: false });
 
 export default function MapPage() {
   const [geojsonRoutes, setGeojsonRoutes] = useState<any[]>([]);

@@ -5,14 +5,13 @@ import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-type PageProps = {
-  params: {
-    username: string;
-  };
-};
-
-export default async function PublicProfilePage({ params }: PageProps) {
-  const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
+export default async function PublicProfilePage({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const rawUsername = params.username;
+  const cleanUsername = decodeURIComponent(rawUsername).replace(/^@/, '');
 
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 

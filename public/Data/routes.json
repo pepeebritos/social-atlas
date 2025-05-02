@@ -1,0 +1,22 @@
+[
+    {
+      "name": "Lost Coast Trail",
+      "description": "Remote coastal trail in Northern California",
+      "coordinates": [
+        [-124.079, 40.034],
+        [-124.064, 40.021],
+        [-124.051, 40.013]
+      ]
+    },
+    {
+      "name": "John Muir Trail Section",
+      "description": "High Sierra trail with granite peaks",
+      "coordinates": [
+        [-119.538, 37.748],
+        [-119.528, 37.742],
+        [-119.518, 37.735]
+      ]
+    }
+  ]
+  
+  

@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   createUserWithEmailAndPassword,
@@ -314,13 +315,13 @@ export default function LandingPage() {
                 {activeTab === "signup" && (
                   <p className="text-xs text-gray-500 text-center mt-2">
                     By creating an account, you agree to our {" "}
-                    <a href="/terms" className="underline">
+                    <Link href="/terms" className="underline">
                       Terms of Service
-                    </a>{" "}
+                    </Link>{" "}
                     and {" "}
-                    <a href="/privacy" className="underline">
+                    <Link href="/privacy" className="underline">
                       Privacy Policy
-                    </a>
+                    </Link>
                     .
                   </p>
                 )}
@@ -363,13 +364,13 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs">
           <span>© 2025 Social Atlas™. All rights reserved.</span>
           <span>·</span>
-          <a href="/terms" className="underline">
+          <Link href="/terms" className="underline">
             Terms of Service
-          </a>
+          </Link>
           <span>·</span>
-          <a href="/privacy" className="underline">
+          <Link href="/privacy" className="underline">
             Privacy Policy
-          </a>
+          </Link>
         </div>
       </footer>
     </div>

@@ -5,13 +5,16 @@ import { db } from '@/lib/firebase';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 
-type PageProps = {
-  params: {
-    username: string;
-  };
-};
+export async function generateStaticParams() {
+  // You can return an empty array or a few fallback usernames
+  return [];
+}
 
-export default async function PublicProfilePage({ params }: PageProps) {
+export default async function PublicProfilePage({
+  params,
+}: {
+  params: { username: string };
+}) {
   const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
@@ -42,7 +45,6 @@ export default async function PublicProfilePage({ params }: PageProps) {
 
   return (
     <div className="max-w-3xl mx-auto p-6 text-white">
-      {/* Banner */}
       <div className="relative h-48 w-full rounded-md overflow-hidden mb-6">
         <Image
           src={user.banner || '/default-banner.jpg'}
@@ -52,7 +54,6 @@ export default async function PublicProfilePage({ params }: PageProps) {
         />
       </div>
 
-      {/* Profile Header */}
       <div className="flex items-center gap-4 mb-4">
         <Image
           src={user.profilePic || '/default-avatar.png'}
@@ -70,10 +71,8 @@ export default async function PublicProfilePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Bio */}
       <p className="text-sm text-gray-300 mb-6">{user.bio || 'No bio yet.'}</p>
 
-      {/* Follow Button */}
       <FollowButton profileUserId={uid} />
     </div>
   );

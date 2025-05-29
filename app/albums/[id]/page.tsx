@@ -1,20 +1,9 @@
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 
-// ✅ Match Next.js Dynamic Route typing 100%
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-// ✅ Metadata function
-export async function generateMetadata(
-  { params }: Props,
-  _parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const docRef = doc(db, 'albums', params.id);
   const snap = await getDoc(docRef);
 
@@ -25,15 +14,13 @@ export async function generateMetadata(
   }
 
   const data = snap.data();
-
   return {
     title: data?.title || 'Social Atlas Album',
-    description: data?.description || 'Explore epic locations around the world.',
+    description: data?.description || 'Explore more with Social Atlas.',
   };
 }
 
-// ✅ Page component
-export default async function Page({ params }: Props) {
+export default async function Page({ params }: { params: { id: string } }) {
   const docRef = doc(db, 'albums', params.id);
   const snap = await getDoc(docRef);
 
@@ -42,7 +29,7 @@ export default async function Page({ params }: Props) {
   const album = snap.data();
 
   return (
-    <main className="p-4">
+    <main className="p-6">
       <h1 className="text-3xl font-bold">{album.title}</h1>
       <p className="text-lg mt-2">{album.description}</p>
     </main>

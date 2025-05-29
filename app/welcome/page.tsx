@@ -82,13 +82,14 @@ export default function WelcomePage() {
   };
 
   const features = [
-    [<FaImages />, 'Photos & Multi-Photos'],
-    [<FaVideo />, 'Video Posts'],
-    [<FaMapMarkedAlt />, 'Custom Maps'],
-    [<FaPenFancy />, 'Write: Articles / Journals / Guides'],
-    [<FaGlobe />, 'Global Discovery Feed'],
-    [<FaUserAlt />, 'Your Map Profile'],
+    { id: 'photos', icon: <FaImages />, title: 'Photos & Multi-Photos' },
+    { id: 'video', icon: <FaVideo />, title: 'Video Posts' },
+    { id: 'maps', icon: <FaMapMarkedAlt />, title: 'Custom Maps' },
+    { id: 'write', icon: <FaPenFancy />, title: 'Write: Articles / Journals / Guides' },
+    { id: 'discovery', icon: <FaGlobe />, title: 'Global Discovery Feed' },
+    { id: 'profile', icon: <FaUserAlt />, title: 'Your Map Profile' },
   ];
+  
 
   return (
     <div className="relative bg-[#FDFBF5] text-[#1B1B1B] scroll-smooth overflow-hidden font-fredoka">
@@ -174,19 +175,19 @@ export default function WelcomePage() {
           </motion.p>
         </div>
         <div className="max-w-4xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 text-center">
-          {features.map(([icon, title], idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 + idx * 0.1, duration: 0.6 }}
-              className="flex flex-col items-center gap-4"
-            >
-              <div className="text-4xl text-[#ffffff]">{icon}</div>
-              <h3 className="text-lg font-bold text-[#ffffff]">{title}</h3>
-            </motion.div>
-          ))}
+        {features.map((feature, idx) => (
+  <motion.div
+    key={feature.id}
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ delay: 0.6 + idx * 0.1, duration: 0.6 }}
+    className="flex flex-col items-center gap-4"
+  >
+    <div className="text-4xl text-[#000000]">{feature.icon}</div>
+    <h3 className="text-lg font-bold text-[#1B1B1B]">{feature.title}</h3>
+  </motion.div>
+))}
         </div>
       </section>
 

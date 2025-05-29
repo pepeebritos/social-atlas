@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./*"]
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -28,7 +28,9 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "components/**/*",
     "lib/**/*",
+    "app/**/*",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],

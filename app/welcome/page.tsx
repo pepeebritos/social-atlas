@@ -293,7 +293,7 @@ export default function WelcomePage() {
       {/* Footer */}
       <footer className="text-center text-sm text-gray-500 pb-10 bg-[#FDFBF5]">
   <div className="flex justify-center gap-4 text-xl mb-2">
-    <a href="https://instagram.com/socialatlas_app" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+    <a href="https://instagram.com/socialatlasapp" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
     <a href="https://twitter.com/socialatlas_app" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
   </div>
   <p>© 2025 Social Atlas™ — All rights reserved.</p>

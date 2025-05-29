@@ -1,16 +1,22 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
-// ✅ Use this props type correctly
-interface AlbumDetailPageProps {
+type Props = {
   params: {
     id: string;
   };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  return {
+    title: `Album ${params.id}`,
+  };
 }
 
-export default async function AlbumDetailPage({ params }: AlbumDetailPageProps) {
-  const ref = doc(db, `posts/albums/${params.id}`);
+export default async function AlbumDetailPage({ params }: Props) {
+  const ref = doc(db, 'posts/albums', params.id);
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {

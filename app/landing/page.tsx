@@ -365,7 +365,7 @@ export default function LandingPage() {
         <div className="flex flex-wrap items-center justify-center gap-4">
           <span className="w-full sm:w-auto text-center">Follow us:</span>
           <a
-            href="https://instagram.com/socialatlas_app"
+            href="https://www.instagram.com/socialatlasapp"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"

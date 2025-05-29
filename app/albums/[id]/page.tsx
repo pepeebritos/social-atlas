@@ -1,49 +1,42 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
-// ✅ Correct type from Next.js for dynamic routes
+// ✅ Explicit type for props
 interface PageProps {
   params: {
     id: string;
   };
 }
 
-// ✅ generateMetadata uses correct prop type — not Promise
+// ✅ Fully explicit generateMetadata
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const ref = doc(db, 'albums', params.id);
-  const snap = await getDoc(ref);
+  const docRef = doc(db, 'albums', params.id);
+  const snapshot = await getDoc(docRef);
 
-  if (!snap.exists()) {
-    return {
-      title: 'Album Not Found',
-    };
-  }
+  if (!snapshot.exists()) return {};
 
-  const album = snap.data();
-
+  const album = snapshot.data();
   return {
-    title: `${album.title} | Social Atlas`,
+    title: album.title || 'Album',
     description: album.description || '',
   };
 }
 
-// ✅ Page function also uses PageProps (not Promise)
-export default async function Page({ params }: PageProps) {
-  const ref = doc(db, 'albums', params.id);
-  const snap = await getDoc(ref);
+// ✅ Fully explicit page component
+export default async function AlbumPage({ params }: PageProps) {
+  const docRef = doc(db, 'albums', params.id);
+  const snapshot = await getDoc(docRef);
 
-  if (!snap.exists()) {
-    notFound();
-  }
+  if (!snapshot.exists()) return notFound();
 
-  const album = snap.data();
+  const album = snapshot.data();
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">{album.title}</h1>
-      <p className="mt-2 text-neutral-600">{album.description}</p>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold">{album.title}</h1>
+      <p className="mt-2 text-lg text-neutral-600">{album.description}</p>
     </div>
   );
 }

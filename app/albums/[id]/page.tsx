@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// ✅ Correctly typed for Next.js dynamic routes
+// ✅ This defines the metadata for this dynamic page
 export async function generateMetadata({
   params,
 }: {
@@ -25,7 +25,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function AlbumPage({
+// ✅ This renders the album page
+export default async function Page({
   params,
 }: {
   params: { id: string };

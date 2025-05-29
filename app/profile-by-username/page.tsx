@@ -1,33 +1,29 @@
-// app/profile-by-username/page.tsx
-
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db } from '@/lib/firebase';
 import Image from 'next/image';
-import FollowButton from '../../components/FollowButton';
+import FollowButton from '@/components/FollowButton';
+import { notFound } from 'next/navigation';
 
 export default async function PublicProfilePage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
-  const cleanUsername = decodeURIComponent(params.username).replace(/^@/, '');
+  const { username } = await params;
+  const cleanUsername = decodeURIComponent(username).replace(/^@/, '');
   console.log('✅ PUBLIC PROFILE ROUTE HIT:', cleanUsername);
 
   const usernameRef = doc(db, 'usernames', cleanUsername);
   const usernameSnap = await getDoc(usernameRef);
 
-  if (!usernameSnap.exists()) {
-    return <div className="p-8 text-white">User not found 😢</div>;
-  }
+  if (!usernameSnap.exists()) return notFound();
 
   const { uid } = usernameSnap.data() as { uid: string };
 
   const userRef = doc(db, 'users', uid);
   const userSnap = await getDoc(userRef);
 
-  if (!userSnap.exists()) {
-    return <div className="p-8 text-white">User data not found 😢</div>;
-  }
+  if (!userSnap.exists()) return notFound();
 
   const user = userSnap.data() as {
     name: string;

@@ -8,6 +8,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Image from 'next/image';
 import FollowButton from '@/components/FollowButton';
 import { parseMentions } from '@/lib/parseMentions';
+import SignOutButton from '@/components/SignOutButton';
 
 const SUGGESTED_TAGS = [
   'Backpacker',
@@ -203,6 +204,7 @@ export default function ProfilePage() {
               Edit Bio + Interests
             </button>
           )}
+          <SignOutButton />
         </div>
       </div>
     </div>

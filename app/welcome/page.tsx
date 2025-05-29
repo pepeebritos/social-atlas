@@ -1,183 +1,324 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { FaInstagram, FaXTwitter } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import {
+  FaInstagram,
+  FaTwitter,
+  FaImages,
+  FaVideo,
+  FaMapMarkedAlt,
+  FaPenFancy,
+  FaGlobe,
+  FaUserAlt,
+  FaCheckCircle,
+} from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Map, Rocket, X } from 'lucide-react';
+import { Dialog } from '@headlessui/react';
 
 export default function WelcomePage() {
-  const [email, setEmail] = useState("");
+  const pathname = usePathname();
+  const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [earthyRotation, setEarthyRotation] = useState(0);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+  const pedroRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      setScrollProgress(scrollPercent);
+      setEarthyRotation(scrollTop % 360);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!email || !email.includes("@")) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
+    if (!email.includes('@')) return alert('Please enter a valid email.');
     setLoading(true);
-    setAlreadyJoined(false);
     setSuccess(false);
+    setAlreadyJoined(false);
 
     try {
-      const q = query(
-        collection(db, "waitlist"),
-        where("email", "==", email)
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (!querySnapshot.empty) {
+      const q = query(collection(db, 'waitlist'), where('email', '==', email));
+      const exists = await getDocs(q);
+      if (!exists.empty) {
         setAlreadyJoined(true);
-        setEmail("");
+        setEmail('');
       } else {
-        await addDoc(collection(db, "waitlist"), {
-          email: email,
+        await addDoc(collection(db, 'waitlist'), {
+          email,
           timestamp: serverTimestamp(),
         });
         setSuccess(true);
-        setEmail("");
+        setEmail('');
       }
-    } catch (error) {
-      console.error("Error joining waitlist:", error);
-      alert("Something went wrong. Please try again.");
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong.');
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#1B1B1B] flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row items-center justify-center gap-10 md:gap-14">
+  const features = [
+    [<FaImages />, 'Photos & Multi-Photos'],
+    [<FaVideo />, 'Video Posts'],
+    [<FaMapMarkedAlt />, 'Custom Maps'],
+    [<FaPenFancy />, 'Write: Articles / Journals / Guides'],
+    [<FaGlobe />, 'Global Discovery Feed'],
+    [<FaUserAlt />, 'Your Map Profile'],
+  ];
 
-        {/* Earthy Logo */}
+  return (
+    <div className="relative bg-[#FDFBF5] text-[#1B1B1B] scroll-smooth overflow-hidden font-fredoka">
+      <div
+        className="fixed top-0 left-0 h-1 bg-[#1D5136] z-50 transition-all duration-300"
+        style={{ width: `${scrollProgress}%` }}
+      />
+
+      {/* Hero Section */}
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 flex flex-col items-center justify-center overflow-hidden text-center px-4">
+        <motion.h1
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="text-[4rem] sm:text-[6rem] md:text-[8rem] font-fredoka font-bold leading-none"
+        >
+          Social Atlas
+        </motion.h1>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="text-[5rem] sm:text-[7rem] md:text-[9rem] font-fredoka font-bold text-[#1D5136] leading-none mb-8"
+        >
+          Welcome!
+        </motion.h2>
+
         <motion.div
-          className="relative flex-shrink-0 w-[16rem] md:w-[24rem]"
-          initial={{ y: -300, rotate: 0, rotateZ: 0, scale: 1 }}
-          animate={{
-            y: [-300, 0, -20, 0],
-            rotate: [0, 0, 360, 360],
-            rotateZ: [0, -10, 10, 0],
-            scale: [1, 1, 0.9, 1],
-          }}
-          transition={{
-            duration: 2.5,
-            ease: "easeOut",
-            times: [0, 0.4, 0.7, 1],
-          }}
-          whileHover={{
-            scale: 1.05,
-            rotateZ: [0, 5, -5, 0],
-            transition: { duration: 0.6 },
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
+          className="w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] -mt-6 overflow-hidden pointer-events-none"
+          style={{ rotate: earthyRotation }}
         >
           <Image
             src="/earthy-icon.png"
-            alt="Social Atlas Logo"
-            width={500}
-            height={500}
-            priority
-            className="w-full h-auto drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+            alt="Earthy"
+            width={420}
+            height={420}
+            className="object-cover mx-auto"
           />
         </motion.div>
+      </section>
 
-        {/* Text + Form */}
-        <div className="text-center md:text-left text-[#FDFBF5] max-w-md md:max-w-xl">
-          <h1
-            className="text-[3.2rem] md:text-[6rem] font-bold leading-tight tracking-tight mb-4"
-            style={{
-              fontFamily: "var(--font-poppins-rounded), 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            }}
-          >
-            Social Atlas
-          </h1>
-
-          <p className="text-base md:text-lg font-medium mt-2 mb-6 bg-[#FDFBF5] text-[#1B1B1B] px-6 py-5 rounded-xl leading-[1.7] shadow-sm">
-            Social Atlas is your global travel companion — discover trails, meet creators, document your journeys, and explore the world with a creative community of modern explorers.
-          </p>
-
-          {/* Waitlist Form */}
-          {success ? (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="flex items-center justify-center mt-6 gap-2 text-green-400 font-semibold text-lg"
-            >
-              <FaCheckCircle className="text-green-400 text-2xl" />
-              Successfully joined the waitlist!
-            </motion.div>
-          ) : alreadyJoined ? (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="flex items-center justify-center mt-6 gap-2 text-yellow-400 font-semibold text-lg"
-            >
-              <FaCheckCircle className="text-yellow-400 text-2xl" />
-              You have already joined the waitlist!
-            </motion.div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-4 w-full">
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full sm:w-auto bg-[#FDFBF5] text-[#1B1B1B] placeholder-gray-500 px-5 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 text-base shadow-md text-center sm:text-left"
-                required
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full sm:w-auto inline-block bg-[#1D5136] hover:bg-[#2a7d58] transition-all duration-300 ease-in-out text-white text-base md:text-lg font-semibold py-3 px-8 rounded-full shadow-md hover:scale-110 hover:brightness-110 disabled:opacity-50"
-              >
-                {loading ? "Joining..." : "Join the waitlist"}
-              </button>
-            </form>
-          )}
+      {/* Tagline Section */}
+      <section className="text-center py-20 px-6 sm:px-8">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1B1B1B] leading-snug space-y-4 max-w-4xl mx-auto">
+          <motion.p initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}>
+            Where journeys become stories.
+          </motion.p>
+          <motion.p initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }}>
+            The world’s first exploration feed, built for creators.
+          </motion.p>
+          <motion.p initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.8 }}>
+            Turn the planet into your canvas. Social Atlas is your toolkit.
+          </motion.p>
+          <motion.p initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 1.0, duration: 0.8 }}>
+            Pin it. Share it. Inspire the world.
+          </motion.p>
         </div>
+      </section>
+
+      {/* Cinematic Features Section */}
+      <div className="h-20 bg-[#FDFBF5]" />
+      <section className="bg-[#1D5136] py-32 px-6 sm:px-10">
+        <div className="text-center mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 50 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.2, duration: 0.8 }} 
+            className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#ffffff]"
+          >
+            Elevate your journey with professional tools
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 30 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.4, duration: 0.8 }} 
+            className="mt-4 text-base sm:text-lg text-[#ffffff] font-bold"
+          >
+            Built for explorers. Designed for creators. Shaped by stories.
+          </motion.p>
+        </div>
+        <div className="max-w-4xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 text-center">
+          {features.map(([icon, title], idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 + idx * 0.1, duration: 0.6 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <div className="text-4xl text-[#ffffff]">{icon}</div>
+              <h3 className="text-lg font-bold text-[#ffffff]">{title}</h3>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Pedro Bio Section */}
+      <div ref={pedroRef} className="h-px w-full" id="pedro-section"></div>
+      <section className="bg-white py-24">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-10 px-6">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <Image
+              src="/pedro-photo.jpg"
+              alt="Pedro"
+              width={360}
+              height={360}
+              className="rounded-xl object-cover"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="flex-1"
+          >
+            <h3 className="text-3xl font-bold mb-4">Built by one explorer for the entire world.</h3>
+            <p className="text-xl leading-relaxed text-gray-800">
+              Hey, I’m Pedro, a creator and outdoor enthusiast who’s spent the last few years exploring the world and documenting it. I built Social Atlas for explorers, travelers, or anyone who wants more than likes! A place to map your journey, share real moments, and connect through stories.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Waitlist Signup */}
+      <section id="waitlist" className="bg-[#1D5136] text-white py-24">
+  <div className="max-w-xl mx-auto text-center px-6">
+    <div className="flex justify-center mb-3">
+      <Rocket className="w-8 h-8 text-white" />
+    </div>
+    <h2 className="text-3xl font-bold mb-4">Be a Founding Explorer</h2>
+    <p className="mb-6 text-white/80">
+      Join our waitlist and help shape the future of creative exploration.
+    </p>
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-4">
+      <input
+        type="email"
+        placeholder="Email address"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full px-4 py-3 rounded-full border border-white/30 bg-white text-[#1B1B1B] shadow-sm focus:outline-none"
+        required
+      />
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-white text-[#1D5136] font-semibold px-6 py-3 rounded-full shadow hover:brightness-110 transition-all disabled:opacity-50"
+      >
+        {loading ? 'Joining...' : 'Join the waitlist'}
+      </button>
+    </form>
+
+    {success && (
+      <div className="mt-4 text-green-400 flex items-center justify-center gap-2">
+        <FaCheckCircle />
+        Successfully joined the waitlist!
       </div>
+    )}
+    {alreadyJoined && (
+      <div className="mt-4 text-yellow-300 flex items-center justify-center gap-2">
+        <FaCheckCircle />
+        You’ve already joined the waitlist!
+      </div>
+    )}
+  </div>
+</section>
 
       {/* Footer */}
-      <footer className="mt-16 text-center text-sm text-white/60 space-y-4 px-4 w-full">
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <span className="w-full sm:w-auto text-center">Follow us:</span>
-          <a
-            href="https://instagram.com/socialatlas_app"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="hover:text-white text-xl transition-transform hover:scale-110"
-          >
-            <FaInstagram />
-          </a>
-          <a
-            href="https://twitter.com/socialatlas_app"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Twitter"
-            className="hover:text-white text-xl transition-transform hover:scale-110"
-          >
-            <FaXTwitter />
-          </a>
-        </div>
+      <footer className="text-center text-sm text-gray-500 pb-10 bg-[#FDFBF5]">
+  <div className="flex justify-center gap-4 text-xl mb-2">
+    <a href="https://instagram.com/socialatlas_app" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+    <a href="https://twitter.com/socialatlas_app" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+  </div>
+  <p>© 2025 Social Atlas™ — All rights reserved.</p>
+  <p className="underline mt-1">
+    <button onClick={() => setShowTermsModal(true)} className="hover:opacity-80">Terms</button> · <button onClick={() => setShowPrivacyModal(true)} className="hover:opacity-80">Privacy</button>
+  </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs">
-          <span>© 2025 Social Atlas™. All rights reserved.</span>
-          <span>·</span>
-          <Link href="/terms" className="underline hover:text-white">Terms of Service</Link>
-          <span>·</span>
-          <Link href="/privacy" className="underline hover:text-white">Privacy Policy</Link>
+  {/* Terms Modal */}
+  <Dialog open={showTermsModal} onClose={() => setShowTermsModal(false)} className="relative z-50">
+    <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+    <div className="fixed inset-0 flex items-center justify-center p-4">
+      <Dialog.Panel className="w-full max-w-3xl rounded-xl bg-white shadow-xl overflow-hidden">
+        <div className="flex justify-between items-center px-6 py-4 border-b">
+          <h2 className="text-lg font-semibold text-[#1D5136]">Terms & Conditions</h2>
+          <button onClick={() => setShowTermsModal(false)} className="hover:opacity-80">
+            <span className="sr-only">Close</span>
+            <X className="w-5 h-5 text-gray-600 hover:text-black" />
+          </button>
         </div>
-      </footer>
+        <iframe
+          src="/terms"
+          className="w-full h-[70vh] border-none"
+          title="Terms and Conditions"
+        />
+      </Dialog.Panel>
+    </div>
+  </Dialog>
+
+  {/* Privacy Modal */}
+  <Dialog open={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} className="relative z-50">
+    <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
+    <div className="fixed inset-0 flex items-center justify-center p-4">
+      <Dialog.Panel className="w-full max-w-3xl rounded-xl bg-white shadow-xl overflow-hidden">
+        <div className="flex justify-between items-center px-6 py-4 border-b">
+          <h2 className="text-lg font-semibold text-[#1D5136]">Privacy Policy</h2>
+          <button onClick={() => setShowPrivacyModal(false)} className="hover:opacity-80">
+            <span className="sr-only">Close</span>
+            <X className="w-5 h-5 text-gray-600 hover:text-black" />
+          </button>
+        </div>
+        <iframe
+          src="/privacy"
+          className="w-full h-[70vh] border-none"
+          title="Privacy Policy"
+        />
+      </Dialog.Panel>
+    </div>
+  </Dialog>
+</footer>
     </div>
   );
 }

@@ -18,6 +18,7 @@
     "incremental": true,
     "module": "esnext",
     "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
     "plugins": [
       {
         "name": "next"

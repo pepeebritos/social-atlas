@@ -1,28 +1,34 @@
 "use client";
+
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { X } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
-  const [backLink, setBackLink] = useState("/welcome");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") || "/welcome";
+
+  const [showClose, setShowClose] = useState(false);
 
   useEffect(() => {
-    if (document.referrer.includes("/landing")) {
-      setBackLink("/landing");
-    } else {
-      setBackLink("/welcome");
+    if (typeof window !== "undefined" && window.self === window.top) {
+      setShowClose(true);
     }
   }, []);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#FDFBF5] px-4 py-12">
       <div className="relative max-w-3xl w-full bg-white p-6 md:p-10 rounded-xl shadow-xl text-[#1B1B1B]">
-        <Link
-          href={backLink}
-          className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black transition"
-          aria-label="Close"
-        >
-          ×
-        </Link>
+        {showClose && (
+          <button
+            onClick={() => router.push(returnTo)}
+            className="absolute top-4 right-4 text-gray-400 hover:text-black transition"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        )}
 
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
 

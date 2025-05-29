@@ -1,5 +1,6 @@
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 // Import Geist Sans
 const geistSans = Geist({
@@ -11,14 +12,6 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
-
-// Import Poppins Rounded
-const poppinsRounded = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  style: ["normal"],
-  variable: "--font-poppins-rounded",
 });
 
 export const metadata = {
@@ -36,8 +29,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${poppinsRounded.variable}`}>
-      <body className="antialiased">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins+Rounded:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <body className="font-poppins antialiased">
         {children}
       </body>
     </html>

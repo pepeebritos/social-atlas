@@ -1,4 +1,4 @@
-// FULL LANDING PAGE WITH USERNAME VALIDATION AND GREEN CHECK
+// FULL LANDING PAGE WITH CHECKBOX AGREEMENT ADDED
 "use client";
 
 import { useState, useEffect } from "react";
@@ -33,9 +33,10 @@ export default function LandingPage() {
   const [forgotEmail, setForgotEmail] = useState("");
   const [showFeatures, setShowFeatures] = useState(false);
   const [earthyIdle, setEarthyIdle] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => setEarthyIdle((prev) => !prev), 25000);
+    const interval = setInterval(() => setEarthyIdle((prev) => !prev), 8000);
     return () => clearInterval(interval);
   }, []);
 
@@ -45,9 +46,9 @@ export default function LandingPage() {
   }, [username]);
 
   const features = [
-    "Explore trails, cities, and secret places",
-    "Meet creators, travelers, and adventurers",
-    "Share your journey with the world",
+    "Explore. Create. Connect.",
+    "Post. Map. Discover.",
+    "Trails. Stories. People.",
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,6 +62,11 @@ export default function LandingPage() {
 
     if (activeTab === "signup" && !usernameValid) {
       alert("Invalid username. Please follow the format.");
+      return;
+    }
+
+    if (activeTab === "signup" && !agreeTerms) {
+      alert("You must agree to the Terms of Service and Privacy Policy.");
       return;
     }
 
@@ -165,7 +171,7 @@ export default function LandingPage() {
                 className="w-full h-auto drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]"
               />
             </motion.div>
-
+  
             {showFeatures && (
               <div className="space-y-3 mt-4 w-full">
                 {features.map((text, index) => (
@@ -183,7 +189,7 @@ export default function LandingPage() {
                 ))}
               </div>
             )}
-
+  
             <style jsx>{`
               @keyframes fadeInUp {
                 from {
@@ -197,13 +203,12 @@ export default function LandingPage() {
               }
             `}</style>
           </div>
-
+  
           <div className="text-[#FDFBF5] max-w-md md:max-w-lg w-full mt-4 md:mt-12">
             <h1
               className="text-[2.5rem] md:text-[5rem] font-bold leading-tight tracking-tight mb-2 text-center md:text-left"
               style={{
-                fontFamily:
-                  "var(--font-poppins-rounded), 'Helvetica Neue', Helvetica, Arial, sans-serif",
+                fontFamily: "var(--font-poppins-rounded), 'Helvetica Neue', Helvetica, Arial, sans-serif",
               }}
             >
               Social Atlas
@@ -211,7 +216,7 @@ export default function LandingPage() {
             <p className="text-center md:text-left text-sm md:text-lg text-white/80 leading-snug mb-4">
               Create your account or sign in to begin your global adventure.
             </p>
-
+  
             <div className="flex justify-center md:justify-start mb-4 space-x-4">
               <button
                 onClick={() => setActiveTab("signup")}
@@ -234,7 +239,7 @@ export default function LandingPage() {
                 Log In
               </button>
             </div>
-
+  
             <div className="transition-all duration-300 ease-in-out">
               <form
                 onSubmit={handleSubmit}
@@ -268,7 +273,7 @@ export default function LandingPage() {
                     )}
                   </div>
                 )}
-
+  
                 <input
                   type="text"
                   placeholder="Email or Username"
@@ -295,6 +300,34 @@ export default function LandingPage() {
                     required
                   />
                 )}
+  
+                {activeTab === "signup" && (
+                  <label className="flex items-center space-x-2 text-sm mt-1">
+                    <input
+                      type="checkbox"
+                      checked={agreeTerms}
+                      onChange={(e) => setAgreeTerms(e.target.checked)}
+                      className="accent-green-600"
+                    />
+                    <span>
+                      I agree to the
+                      <Link
+                        href={{ pathname: "/terms", query: { returnTo: "/landing" } }}
+                        className="underline px-1"
+                      >
+                        Terms of Service
+                      </Link>
+                      and
+                      <Link
+                        href={{ pathname: "/privacy", query: { returnTo: "/landing" } }}
+                        className="underline px-1"
+                      >
+                        Privacy Policy
+                      </Link>
+                    </span>
+                  </label>
+                )}
+  
                 {activeTab === "login" && (
                   <label className="flex items-center space-x-2 text-sm mt-2">
                     <input
@@ -306,25 +339,14 @@ export default function LandingPage() {
                     <span>Remember me</span>
                   </label>
                 )}
+  
                 <button
                   type="submit"
                   className="w-full bg-[#1D5136] hover:bg-[#2a7d58] text-white font-semibold py-3 rounded-xl transition-all hover:scale-105"
                 >
                   {activeTab === "signup" ? "Create Account" : "Log In"}
                 </button>
-                {activeTab === "signup" && (
-                  <p className="text-xs text-gray-500 text-center mt-2">
-                    By creating an account, you agree to our {" "}
-                    <Link href="/terms" className="underline">
-                      Terms of Service
-                    </Link>{" "}
-                    and {" "}
-                    <Link href="/privacy" className="underline">
-                      Privacy Policy
-                    </Link>
-                    .
-                  </p>
-                )}
+  
                 {activeTab === "login" && (
                   <p
                     onClick={() => setShowForgotPasswordModal(true)}
@@ -338,7 +360,7 @@ export default function LandingPage() {
           </div>
         </div>
       </main>
-
+  
       <footer className="shrink-0 text-center text-sm text-white/60 space-y-2 px-4 py-4 w-full bg-[#1B1B1B]">
         <div className="flex flex-wrap items-center justify-center gap-4">
           <span className="w-full sm:w-auto text-center">Follow us:</span>
@@ -364,11 +386,11 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xs">
           <span>© 2025 Social Atlas™. All rights reserved.</span>
           <span>·</span>
-          <Link href="/terms" className="underline">
+          <Link href={{ pathname: "/terms", query: { returnTo: "/landing" } }} className="underline">
             Terms of Service
           </Link>
           <span>·</span>
-          <Link href="/privacy" className="underline">
+          <Link href={{ pathname: "/privacy", query: { returnTo: "/landing" } }} className="underline">
             Privacy Policy
           </Link>
         </div>

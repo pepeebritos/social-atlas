@@ -7,20 +7,38 @@
       "**/node_modules/**"
     ]
   },
-  "functions": [
+  "functions": {
+    "source": "functions",
+    "codebase": "default",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "*.local"
+    ],
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint"
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": [
     {
-      "source": "functions",
-      "codebase": "default",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint"
-      ]
+      "target": "default",
+      "rules": "storage.rules",
+      "region": "us-west2"
     }
-  ]
+  ],
+  "targets": {
+    "thesocialatlas": {
+      "storage": {
+        "default": [
+          "thesocialatlas.appspot.com"
+        ]
+      }
+    }
+  }
 }

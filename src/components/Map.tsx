@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -55,6 +55,8 @@ const Map = ({ geojsonData, focus }: MapProps) => {
 
   useEffect(() => {
     if (!mapContainer.current || geojsonData.length === 0) return;
+
+    const stableData = JSON.stringify(geojsonData);
 
     if (mapRef.current) {
       const map = mapRef.current;
@@ -152,10 +154,14 @@ const Map = ({ geojsonData, focus }: MapProps) => {
       map.setConfigProperty('basemap', 'lightPreset', lighting);
       map.setConfigProperty('basemap', 'show3dObjects', show3D);
     });
-  }, [geojsonData, focus, mapStyle]);
+
+    // we only want this to re-run when geojson data actually changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(geojsonData), focus, mapStyle]);
 
   return (
     <div className="relative w-full h-full rounded-md overflow-hidden">
+      {/* UI Controls */}
       <div className="absolute top-2 left-2 z-10 bg-gray-800 bg-opacity-90 text-white p-3 rounded-xl shadow-md space-y-3 text-sm">
         <div>
           <label className="block text-xs font-semibold mb-1">Lighting</label>
@@ -210,4 +216,4 @@ const Map = ({ geojsonData, focus }: MapProps) => {
   );
 };
 
-export default Map;
+export default memo(Map);

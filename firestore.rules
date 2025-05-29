@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 👤 USERS
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update, delete: if request.auth.uid == userId;
+    }
+
+    // 🆔 USERNAMES (e.g. @pedro → uid)
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    // 🗺️ ROUTES (legacy or unused now that routes are under /posts)
+    match /routes/{routeId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
+    // 🧭 MAPS
+    match /maps/{mapId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
+    // 📸 PHOTO POSTS - SINGLE & MULTI (legacy fallback if still used)
+    match /posts/photos/{type}/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.authorId;
+    }
+
+    // 📸 POSTS (current standard — includes photo + route + others)
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.authorId;
+    }
+
+    // 💬 COMMENTS
+    match /posts/{postId}/comments/{commentId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
+    // 🧢 FOLLOWERS / FOLLOWING
+    match /users/{userId}/followers/{followerId} {
+      allow read, write: if request.auth.uid == userId || request.auth.uid == followerId;
+    }
+    match /users/{userId}/following/{followingId} {
+      allow read, write: if request.auth.uid == userId || request.auth.uid == followingId;
+    }
+
+    // 👍 LIKES
+    match /posts/{postId}/likes/{likeId} {
+      allow read: if true;
+      allow create, delete: if request.auth.uid == likeId;
+    }
+
+    // 🎒 GEAR LISTS
+    match /gearLists/{listId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
+    // 📬 WAITLIST
+    match /waitlist/{docId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if false;
+    }
+
+    // 🧠 DEFAULT: Block everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

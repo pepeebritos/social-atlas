@@ -1,39 +1,49 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
 import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-// ✅ Fix generateMetadata with correct inline typing
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const docRef = doc(db, 'albums', params.id);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) {
-    return { title: 'Album not found' };
-  }
-
-  const data = docSnap.data();
-  return {
-    title: `${data.title} | Social Atlas`,
-    description: data.description || '',
+// ✅ Correct type from Next.js for dynamic routes
+interface PageProps {
+  params: {
+    id: string;
   };
 }
 
-// ✅ Fix Page props typing as well
-export default async function Page({ params }: { params: { id: string } }) {
-  const docRef = doc(db, 'albums', params.id);
-  const docSnap = await getDoc(docRef);
+// ✅ generateMetadata uses correct prop type — not Promise
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const ref = doc(db, 'albums', params.id);
+  const snap = await getDoc(ref);
 
-  if (!docSnap.exists()) {
+  if (!snap.exists()) {
+    return {
+      title: 'Album Not Found',
+    };
+  }
+
+  const album = snap.data();
+
+  return {
+    title: `${album.title} | Social Atlas`,
+    description: album.description || '',
+  };
+}
+
+// ✅ Page function also uses PageProps (not Promise)
+export default async function Page({ params }: PageProps) {
+  const ref = doc(db, 'albums', params.id);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
     notFound();
   }
 
-  const data = docSnap.data();
+  const album = snap.data();
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold">{data.title}</h1>
-      <p className="text-neutral-700">{data.description}</p>
+      <h1 className="text-2xl font-bold">{album.title}</h1>
+      <p className="mt-2 text-neutral-600">{album.description}</p>
     </div>
   );
 }

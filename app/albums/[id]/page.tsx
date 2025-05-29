@@ -3,14 +3,25 @@ import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// ✅ Inline typed params to avoid Vercel/Next.js 15 build bug
+// ✅ Correctly typed for Next.js dynamic routes
 export async function generateMetadata({
   params,
 }: {
   params: { id: string };
 }): Promise<Metadata> {
+  const docRef = doc(db, 'albums', params.id);
+  const snap = await getDoc(docRef);
+
+  if (!snap.exists()) {
+    return {
+      title: 'Album Not Found',
+    };
+  }
+
+  const data = snap.data();
   return {
-    title: `Album ${params.id}`,
+    title: data.title || 'Social Atlas Album',
+    description: data.description || 'Explore more with Social Atlas.',
   };
 }
 
@@ -19,39 +30,17 @@ export default async function AlbumPage({
 }: {
   params: { id: string };
 }) {
-  const ref = doc(db, 'posts/albums', params.id);
-  const snap = await getDoc(ref);
+  const docRef = doc(db, 'albums', params.id);
+  const snap = await getDoc(docRef);
 
-  if (!snap.exists()) {
-    return notFound();
-  }
+  if (!snap.exists()) return notFound();
 
-  const data = snap.data();
+  const album = snap.data();
 
   return (
-    <main className="min-h-screen bg-[#1e1e1e] text-white p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold">{data.title}</h1>
-
-        {data.description && (
-          <p className="text-gray-400">{data.description}</p>
-        )}
-
-        {data.location && (
-          <p className="text-sm text-gray-500">📍 {data.location}</p>
-        )}
-
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pt-4">
-          {data.imageUrls?.map((url: string, idx: number) => (
-            <img
-              key={idx}
-              src={url}
-              alt={`Album photo ${idx + 1}`}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-          ))}
-        </div>
-      </div>
+    <main className="p-4">
+      <h1 className="text-3xl font-bold">{album.title}</h1>
+      <p className="text-lg mt-2">{album.description}</p>
     </main>
   );
 }

@@ -1,15 +1,15 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { notFound } from 'next/navigation';
-import { type Metadata } from 'next';
 
-type PageProps = {
+// ✅ Use this props type correctly
+interface AlbumDetailPageProps {
   params: {
     id: string;
   };
-};
+}
 
-export default async function AlbumDetailPage({ params }: PageProps) {
+export default async function AlbumDetailPage({ params }: AlbumDetailPageProps) {
   const ref = doc(db, `posts/albums/${params.id}`);
   const snap = await getDoc(ref);
 

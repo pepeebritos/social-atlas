@@ -30,6 +30,13 @@ service cloud.firestore {
       allow update, delete: if request.auth.uid == resource.data.userId;
     }
 
+    // 📚 ALBUMS
+    match /albums/{albumId} {
+      allow read: if true; // ✅ TEMP: allow public read for debugging
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
+    }
+
     // 📸 PHOTO POSTS - SINGLE & MULTI (legacy fallback if still used)
     match /posts/photos/{type}/{postId} {
       allow read: if true;

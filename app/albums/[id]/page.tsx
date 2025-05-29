@@ -1,22 +1,23 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
 
-// This is the right way to type `params` in Next.js 15
-type PageProps = {
+// ✅ Properly typed for Next.js 15+ App Router
+type AlbumPageProps = {
   params: {
     id: string;
   };
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+// Optional: Dynamic metadata per album
+export async function generateMetadata({ params }: AlbumPageProps): Promise<Metadata> {
   return {
     title: `Album ${params.id}`,
   };
 }
 
-export default async function AlbumPage({ params }: PageProps) {
+export default async function AlbumPage({ params }: AlbumPageProps) {
   const ref = doc(db, 'posts/albums', params.id);
   const snap = await getDoc(ref);
 
@@ -31,7 +32,10 @@ export default async function AlbumPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold">{data.title}</h1>
 
-        {data.description && <p className="text-gray-400">{data.description}</p>}
+        {data.description && (
+          <p className="text-gray-400">{data.description}</p>
+        )}
+
         {data.location && (
           <p className="text-sm text-gray-500">📍 {data.location}</p>
         )}

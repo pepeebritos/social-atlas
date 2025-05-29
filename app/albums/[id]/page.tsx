@@ -1,37 +1,39 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from 'lib/firebase';
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
+// ✅ Fix generateMetadata with correct inline typing
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const docRef = doc(db, 'albums', params.id);
-  const snap = await getDoc(docRef);
+  const docSnap = await getDoc(docRef);
 
-  if (!snap.exists()) {
-    return {
-      title: 'Album Not Found',
-    };
+  if (!docSnap.exists()) {
+    return { title: 'Album not found' };
   }
 
-  const data = snap.data();
+  const data = docSnap.data();
   return {
-    title: data?.title || 'Social Atlas Album',
-    description: data?.description || 'Explore more with Social Atlas.',
+    title: `${data.title} | Social Atlas`,
+    description: data.description || '',
   };
 }
 
+// ✅ Fix Page props typing as well
 export default async function Page({ params }: { params: { id: string } }) {
   const docRef = doc(db, 'albums', params.id);
-  const snap = await getDoc(docRef);
+  const docSnap = await getDoc(docRef);
 
-  if (!snap.exists()) return notFound();
+  if (!docSnap.exists()) {
+    notFound();
+  }
 
-  const album = snap.data();
+  const data = docSnap.data();
 
   return (
-    <main className="p-6">
-      <h1 className="text-3xl font-bold">{album.title}</h1>
-      <p className="text-lg mt-2">{album.description}</p>
-    </main>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold">{data.title}</h1>
+      <p className="text-neutral-700">{data.description}</p>
+    </div>
   );
 }

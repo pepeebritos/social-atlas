@@ -37,8 +37,9 @@ export default function WelcomePage() {
   const [earthyRotation, setEarthyRotation] = useState(0);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const pedroRef = useRef<HTMLDivElement | null>(null);
+  const pedroRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,10 +50,15 @@ export default function WelcomePage() {
       setEarthyRotation(scrollTop % 360);
     };
     window.addEventListener('scroll', handleScroll);
+
+    if (typeof window !== 'undefined') {
+      setIsMobile(window.innerWidth < 640);
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email.includes('@')) return alert('Please enter a valid email.');
     setLoading(true);
@@ -89,7 +95,6 @@ export default function WelcomePage() {
     { id: 'discovery', icon: <FaGlobe />, title: 'Global Discovery Feed' },
     { id: 'profile', icon: <FaUserAlt />, title: 'Your Map Profile' },
   ];
-  
 
   return (
     <div className="relative bg-[#FDFBF5] text-[#1B1B1B] scroll-smooth overflow-hidden font-fredoka">
@@ -122,7 +127,7 @@ export default function WelcomePage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.2, ease: 'easeOut' }}
-          className="w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] -mt-6 overflow-hidden pointer-events-none"
+          className="w-[360px] h-[360px] sm:w-[420px] sm:h-[420px] mt-4 sm:-mt-6 overflow-hidden pointer-events-none"
           style={{ rotate: earthyRotation }}
         >
           <Image
@@ -135,61 +140,79 @@ export default function WelcomePage() {
         </motion.div>
       </section>
 
-      {/* Tagline Section */}
-      <section className="text-center py-20 px-6 sm:px-8">
-        <div className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1B1B1B] leading-snug space-y-4 max-w-4xl mx-auto">
-          <motion.p initial={{ opacity: 0, y: 60 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }}>
-            Where journeys become stories.
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }}>
-            The world’s first exploration feed, built for creators.
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.8 }}>
-            Turn the planet into your canvas. Social Atlas is your toolkit.
-          </motion.p>
-          <motion.p initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 1.0, duration: 0.8 }}>
-            Pin it. Share it. Inspire the world.
-          </motion.p>
-        </div>
-      </section>
+{/* Tagline Section */}
+<section className="text-center pt-0 pb-2 sm:pt-20 sm:pb-20 px-6 sm:px-8">
+  <div className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1B1B1B] leading-snug space-y-3 sm:space-y-4 max-w-4xl mx-auto">
+    <p>
+      Where journeys become stories.
+    </p>
+    <motion.p
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.8 }}
+    >
+      The world’s first exploration feed, built for creators.
+    </motion.p>
+    <motion.p
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.6, duration: 0.8 }}
+    >
+      Turn the planet into your canvas. Social Atlas is your toolkit.
+    </motion.p>
+    <motion.p
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8, duration: 0.8 }}
+    >
+      Pin it. Share it. Inspire the world.
+    </motion.p>
+  </div>
+</section>
 
-      {/* Cinematic Features Section */}
-      <div className="h-20 bg-[#FDFBF5]" />
-      <section className="bg-[#1D5136] py-32 px-6 sm:px-10">
-        <div className="text-center mb-16">
-          <motion.h2 
-            initial={{ opacity: 0, y: 50 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ delay: 0.2, duration: 0.8 }} 
-            className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#ffffff]"
-          >
-            Elevate your journey with professional tools
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            transition={{ delay: 0.4, duration: 0.8 }} 
-            className="mt-4 text-base sm:text-lg text-[#ffffff] font-bold"
-          >
-            Built for explorers. Designed for creators. Shaped by stories.
-          </motion.p>
+
+{/* Cinematic Features Section */}
+<div className="h-12 bg-[#FDFBF5]" />
+<section className="bg-[#1D5136] py-16 sm:py-24 px-4 sm:px-8">
+  <div className="text-center mb-10 sm:mb-14">
+    <motion.h2
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
+      className="text-4xl sm:text-5xl font-bold text-white"
+    >
+      Elevate your journey with professional tools
+    </motion.h2>
+    <motion.p
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.8 }}
+      className="mt-3 text-sm sm:text-base text-white font-semibold"
+    >
+      Built for explorers. Designed for creators. Shaped by stories.
+    </motion.p>
+  </div>
+
+  <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8 max-w-4xl mx-auto text-center">
+    {features.map((feature, idx) => (
+      <motion.div
+        key={feature.id}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.5 + idx * 0.1, duration: 0.6 }}
+        className="flex flex-col items-center justify-center text-center space-y-2"
+      >
+        <div className="text-2xl sm:text-3xl text-white">
+          {feature.icon}
         </div>
-        <div className="max-w-4xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 text-center">
-        {features.map((feature, idx) => (
-  <motion.div
-    key={feature.id}
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ delay: 0.6 + idx * 0.1, duration: 0.6 }}
-    className="flex flex-col items-center gap-4"
-  >
-    <div className="text-4xl text-[#ffffff]">{feature.icon}</div>
-    <h3 className="text-lg font-bold text-[#ffffff]">{feature.title}</h3>
-  </motion.div>
-))}
-        </div>
-      </section>
+        <h3 className="text-sm sm:text-base font-bold text-white leading-tight">
+          {feature.title}
+        </h3>
+      </motion.div>
+    ))}
+  </div>
+</section>
 
       {/* Pedro Bio Section */}
       <div ref={pedroRef} className="h-px w-full" id="pedro-section"></div>

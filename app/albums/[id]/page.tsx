@@ -3,21 +3,22 @@ import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// ✅ Properly typed for Next.js 15+ App Router
-type AlbumPageProps = {
-  params: {
-    id: string;
-  };
-};
-
-// Optional: Dynamic metadata per album
-export async function generateMetadata({ params }: AlbumPageProps): Promise<Metadata> {
+// ✅ Inline typed params to avoid Vercel/Next.js 15 build bug
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   return {
     title: `Album ${params.id}`,
   };
 }
 
-export default async function AlbumPage({ params }: AlbumPageProps) {
+export default async function AlbumPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const ref = doc(db, 'posts/albums', params.id);
   const snap = await getDoc(ref);
 

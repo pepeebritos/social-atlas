@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { auth, db } from '@/lib/firebase';
+import { auth, db } from 'lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Image from 'next/image';
-import FollowButton from '@/components/FollowButton';
+import FollowButton from 'components/FollowButton';
 
 export default function PublicProfilePage() {
   const { uid } = useParams();

@@ -1,9 +1,9 @@
 // app/username-profile/page.tsx
 
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from 'lib/firebase';
 import Image from 'next/image';
-import FollowButton from '@/components/FollowButton';
+import FollowButton from 'components/FollowButton';
 
 export default async function PublicProfilePage({
   params,

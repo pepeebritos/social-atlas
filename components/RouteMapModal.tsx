@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import { X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const Map = dynamic(() => import('@/components/Map'), { ssr: false });
+const Map = dynamic(() => import('components/Map'), { ssr: false });
 
 interface RouteMapModalProps {
   isOpen: boolean;

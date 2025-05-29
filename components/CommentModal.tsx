@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { db, auth } from '@/lib/firebase';
+import { db, auth } from 'lib/firebase';
 import {
   doc,
   getDocs,
@@ -14,8 +14,8 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { Dialog } from '@headlessui/react';
-import { parseMentions } from '@/lib/parseMentions';
-import MentionInput from '@/components/MentionInput';
+import { parseMentions } from 'lib/parseMentions';
+import MentionInput from 'components/MentionInput';
 
 interface CommentModalProps {
   postId: string;

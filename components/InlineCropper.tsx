@@ -2,7 +2,7 @@
 
 import Cropper from 'react-easy-crop';
 import { useState, useCallback, useEffect } from 'react';
-import { getCroppedImg } from '@/lib/cropUtils';
+import { getCroppedImg } from 'lib/cropUtils';
 
 interface InlineCropperProps {
   imageUrl: string;

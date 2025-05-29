@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { auth } from 'lib/firebase';
 
 export default function SignOutButton() {
   const router = useRouter();

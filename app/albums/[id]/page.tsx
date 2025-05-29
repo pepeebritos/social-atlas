@@ -1,7 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from 'lib/firebase';
 
 // ✅ Match Next.js Dynamic Route typing 100%
 type Props = {

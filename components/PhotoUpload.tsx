@@ -2,12 +2,12 @@
 
 import { useState, useMemo } from 'react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db, auth, storage } from '@/lib/firebase';
+import { db, auth, storage } from 'lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import InlineCropper from './InlineCropper';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { POST_SIZE_MAP } from '@/utils/LayoutEngine'; // ✅ NEW IMPORT
+import { POST_SIZE_MAP } from 'lib/utils/LayoutEngine'; // ✅ NEW IMPORT
 
 interface PhotoUploadProps {
   onPostCreated: (newPost: any) => void;

@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db, storage } from '@/lib/firebase';
+import { auth, db, storage } from 'lib/firebase';
 import * as toGeoJSON from '@mapbox/togeojson';
 
-const Map = dynamic(() => import('@/components/Map'), { ssr: false });
+const Map = dynamic(() => import('components/Map'), { ssr: false });
 
 export default function CreateRoutePostForm({ onPostCreated }: { onPostCreated: (newPost: any) => void }) {
   const [user, setUser] = useState<any>(null);

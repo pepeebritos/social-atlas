@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from 'lib/firebase';
 import { Dialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 

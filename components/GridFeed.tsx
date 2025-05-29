@@ -12,7 +12,7 @@ import {
   GRID_CELL_HEIGHT,
   GAP,
   MARGIN
-} from '@/utils/LayoutEngine';
+} from 'lib/utils/LayoutEngine';
 import PostCard from './PostCard';
 import { useInView } from 'react-intersection-observer';
 import { ChevronUp } from 'lucide-react';

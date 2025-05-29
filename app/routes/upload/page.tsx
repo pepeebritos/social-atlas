@@ -5,11 +5,11 @@ import mapboxgl from 'mapbox-gl';
 import dynamic from 'next/dynamic';
 import * as toGeoJSON from '@mapbox/togeojson';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from 'lib/firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const Map = dynamic(() => import('@/components/Map'), {
+const Map = dynamic(() => import('components/Map'), {
   ssr: false,
 });
 

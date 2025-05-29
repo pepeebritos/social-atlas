@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { db, auth } from '@/lib/firebase';
+import { db, auth } from 'lib/firebase';
 import {
   doc,
   getDoc,
@@ -15,25 +15,24 @@ import {
 import CommentModal from './CommentModal';
 import EditCaptionModal from './EditCaptionModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
-import { parseMentions } from '@/lib/parseMentions';
+import { parseMentions } from 'lib/parseMentions';
 import dynamic from 'next/dynamic';
 import {
   ImageIcon, Video, Map, FileText, Package, Star, Heart, MessageSquare, ChevronLeft, ChevronRight, MoreHorizontal
 } from 'lucide-react';
 import ExpandedPostModal from './ExpandedPostModal';
 import { useInView } from 'react-intersection-observer';
-import { cn } from '@/lib/utils';
 import { ClassicArticleCard } from './ClassicArticleCard';
 import { SplitArticleCard } from './SplitArticleCard';
 import { TimelineJournalCard } from './TimelineJournalCard';
-import { POST_SIZE_MAP, GRID_CELL_HEIGHT } from '@/utils/LayoutEngine';
+import { POST_SIZE_MAP, GRID_CELL_HEIGHT } from 'lib/utils/LayoutEngine';
 import ExpandedWriteModal from './ExpandedWriteModal';
 
 
 
 
 
-const MapComponent = dynamic(() => import('@/components/Map'), { ssr: false });
+const MapComponent = dynamic(() => import('components/Map'), { ssr: false });
 
 interface PostCardProps {
   post: any;

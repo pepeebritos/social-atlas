@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { auth, db, storage } from '@/lib/firebase';
+import { auth, db, storage } from 'lib/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Image from 'next/image';
-import FollowButton from '@/components/FollowButton';
-import { parseMentions } from '@/lib/parseMentions';
-import SignOutButton from '@/components/SignOutButton';
+import FollowButton from 'components/FollowButton';
+import { parseMentions } from 'lib/parseMentions';
+import SignOutButton from 'components/SignOutButton';
 
 const SUGGESTED_TAGS = [
   'Backpacker',

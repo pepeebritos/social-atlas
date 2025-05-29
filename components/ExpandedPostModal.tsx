@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { parseMentions } from '@/lib/parseMentions';
+import { parseMentions } from 'lib/parseMentions';
 
 const Map = dynamic(() => import('./Map'), { ssr: false });
 

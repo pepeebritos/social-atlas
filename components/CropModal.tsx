@@ -3,7 +3,7 @@
 
 import Cropper from 'react-easy-crop';
 import { useState, useCallback } from 'react';
-import { getCroppedImg } from '@/lib/cropUtils';
+import { getCroppedImg } from 'lib/cropUtils';
 import { Dialog } from '@headlessui/react';
 
 interface CropModalProps {

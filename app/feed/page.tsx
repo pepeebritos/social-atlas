@@ -12,12 +12,12 @@ import {
   DocumentData
 } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { db } from '@/lib/firebase';
-import CreatePostModal from '@/components/CreatePostModal';
-import GridFeed from '@/components/GridFeed';
-import UploadProgressBar from '@/components/ui/UploadProgressBar';
-import FloatingFilterButton from '@/components/ui/FloatingFilterButton';
-import TopBar from '@/components/TopBar';
+import { db } from 'lib/firebase';
+import CreatePostModal from 'components/CreatePostModal';
+import GridFeed from 'components/GridFeed';
+import UploadProgressBar from 'components/ui/UploadProgressBar';
+import FloatingFilterButton from 'components/ui/FloatingFilterButton';
+import TopBar from 'components/TopBar';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 

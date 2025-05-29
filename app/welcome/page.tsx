@@ -23,7 +23,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db } from 'lib/firebase';
 import { Map, Rocket, X } from 'lucide-react';
 import { Dialog } from '@headlessui/react';
 
@@ -184,8 +184,8 @@ export default function WelcomePage() {
     transition={{ delay: 0.6 + idx * 0.1, duration: 0.6 }}
     className="flex flex-col items-center gap-4"
   >
-    <div className="text-4xl text-[#000000]">{feature.icon}</div>
-    <h3 className="text-lg font-bold text-[#1B1B1B]">{feature.title}</h3>
+    <div className="text-4xl text-[#ffffff]">{feature.icon}</div>
+    <h3 className="text-lg font-bold text-[#ffffff]">{feature.title}</h3>
   </motion.div>
 ))}
         </div>

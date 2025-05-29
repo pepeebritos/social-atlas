@@ -14,7 +14,7 @@ import {
   browserLocalPersistence,
   browserSessionPersistence,
 } from "firebase/auth";
-import { auth, db } from "@/lib/firebase";
+import { auth, db } from "lib/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { FaInstagram, FaXTwitter, FaCheck } from "react-icons/fa6";
 import { useRouter } from "next/navigation";

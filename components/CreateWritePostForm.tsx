@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Input } from 'components/ui/input';
+import { Switch } from 'components/ui/switch';
+import { Button } from 'components/ui/button';
+import { cn } from 'lib/utils';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db, auth, storage } from '@/lib/firebase';
+import { db, auth, storage } from 'lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import dynamic from 'next/dynamic';
 
-const RichEditor = dynamic(() => import('@/components/RichTextEditor'), { ssr: false });
+const RichEditor = dynamic(() => import('components/RichTextEditor'), { ssr: false });
 
 const POST_TYPES = ['article', 'journal', 'guide'] as const;
 type PostSubtype = typeof POST_TYPES[number];

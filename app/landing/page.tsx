@@ -1,5 +1,5 @@
-// FULL LANDING PAGE WITH CHECKBOX AGREEMENT ADDED
 "use client";
+// FULL LANDING PAGE WITH CHECKBOX AGREEMENT ADDED
 
 import { useState, useEffect } from "react";
 import Image from "next/image";

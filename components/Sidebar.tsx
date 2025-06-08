@@ -1,3 +1,5 @@
+'use client';
+
 // Sidebar.tsx (Polished Layout with Square Avatar)
 import { Home, Map, Compass, Bell, Plus, Search } from 'lucide-react';
 import Image from 'next/image';

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Home, Map, Compass, Bell, Menu } from 'lucide-react';
